@@ -64,10 +64,11 @@ namespace RazorPagesAuthenticationViaWebApi
             {
                 var result = await signInManager.PasswordSignInAsync(username, password, false, false);
 
-                //IsLoggedIn is true here
-                var IsLoggedIn = httpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated;
                 if (result.Succeeded)
                 {
+                    //IsLoggedIn is true here
+                    var IsLoggedIn = httpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated;
+
                     return Results.Ok();
                 }
                 return Results.BadRequest($"SignInResult: {result}");

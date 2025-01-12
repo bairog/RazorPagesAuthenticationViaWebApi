@@ -113,11 +113,12 @@ namespace RazorPagesAuthenticationViaWebApi.Areas.Identity.Pages.Account
                 var url = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/LoginUser?username={Input.Email}&password={Input.Password}";
                 var response = await client.GetAsync(url);
 
-                //But IsLoggedIn becomes FALSE here
-                var IsLoggedIn = _httpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated;
                 switch (response.StatusCode)
                 {
                     case System.Net.HttpStatusCode.OK:
+                        //But IsLoggedIn becomes FALSE here
+                        var IsLoggedIn = _httpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated;
+
                         return Redirect(returnUrl);
                         break;
 
