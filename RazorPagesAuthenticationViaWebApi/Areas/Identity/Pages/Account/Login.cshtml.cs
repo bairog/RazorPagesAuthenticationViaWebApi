@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace RazorPagesAuthenticationViaWebApi.Areas.Identity.Pages.Account
 {
@@ -21,11 +22,13 @@ namespace RazorPagesAuthenticationViaWebApi.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IHttpContextAccessor httpContextAccessor)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -110,6 +113,8 @@ namespace RazorPagesAuthenticationViaWebApi.Areas.Identity.Pages.Account
                 var url = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/LoginUser?username={Input.Email}&password={Input.Password}";
                 var response = await client.GetAsync(url);
 
+                //But IsLoggedIn becomes FALSE here
+                var IsLoggedIn = _httpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated;
                 switch (response.StatusCode)
                 {
                     case System.Net.HttpStatusCode.OK:

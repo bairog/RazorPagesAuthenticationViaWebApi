@@ -60,9 +60,12 @@ namespace RazorPagesAuthenticationViaWebApi
 
             app.MapRazorPages();
 
-            app.MapGet("/api/LoginUser", async (string username, string password, SignInManager<IdentityUser> signInManager) =>
+            app.MapGet("/api/LoginUser", async (string username, string password, SignInManager<IdentityUser> signInManager, IHttpContextAccessor httpContextAccessor) =>
             {
                 var result = await signInManager.PasswordSignInAsync(username, password, false, false);
+
+                //IsLoggedIn is true here
+                var IsLoggedIn = httpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated;
                 if (result.Succeeded)
                 {
                     return Results.Ok();
